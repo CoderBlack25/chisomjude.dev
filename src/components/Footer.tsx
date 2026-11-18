@@ -4,9 +4,13 @@ interface SocialLink {
 }
 
 const SOCIAL_LINKS: readonly SocialLink[] = [
-  { label: "Email", href: "mailto:you@example.com" },
-  { label: "GitHub", href: "https://github.com/your-username" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-username" },
+  { label: "Email", href: "mailto:koderblac@gmail.com" },
+  { label: "GitHub", href: "https://github.com/CoderBlack25" },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/chisom-chukwuma-80b033205/",
+  },
+  { label: "X", href: "https://x.com/logicdey4u" },
 ] as const;
 
 const OWNER_NAME = "Chisom Jude";
@@ -16,13 +20,13 @@ export default function Footer(): React.JSX.Element {
 
   return (
     <footer className="w-full">
-      <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-6 py-5 text-xs font-medium text-(--text)">
+      <div className="mx-auto flex max-w-2xl flex-col items-center justify-between gap-3 text-center sm:flex-row sm:gap-4 sm:text-left px-4 sm:px-6 py-5 text-xs font-medium text-(--text)">
         <p>
           &copy; {year} {OWNER_NAME}
         </p>
 
         <nav aria-label="Social links">
-          <ul className="flex items-center gap-6">
+          <ul className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             {SOCIAL_LINKS.map(({ label, href }) => {
               const isExternal: boolean = href.startsWith("http");
 
@@ -34,9 +38,12 @@ export default function Footer(): React.JSX.Element {
                       target: "_blank",
                       rel: "noopener noreferrer",
                     })}
-                    className="transition-colors duration-200 hover:text-(--text-h)"
+                    className="inline-flex min-h-11 items-center py-2.5 px-1 transition-colors duration-200 hover:text-(--text-h) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--text-h) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg) rounded-xs"
                   >
-                    {label}
+                    <span>{label}</span>
+                    {isExternal && (
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    )}
                   </a>
                 </li>
               );

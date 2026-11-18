@@ -21,7 +21,7 @@ export default function Toolkit({
   return (
     <section
       aria-labelledby="toolkit-heading"
-      className="mx-auto w-full max-w-2xl px-6"
+      className="mx-auto w-full max-w-2xl px-4 sm:px-6"
     >
       <div className="border-b-[0.5px] border-(--border)">
         <div className="flex flex-col space-y-8 py-14">
@@ -30,12 +30,15 @@ export default function Toolkit({
               {eyebrow}
             </p>
 
-            <h2 className="text-2xl font-bold tracking-[-0.055em] text-(--accent) sm:text-[1.55rem]">
+            <h2
+              id="toolkit-heading"
+              className="text-2xl font-bold tracking-[-0.055em] text-(--accent) sm:text-[1.55rem]"
+            >
               {title}
             </h2>
           </div>
 
-          <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
             {items.map((item) => (
               <li
                 key={item.id}
@@ -44,7 +47,7 @@ export default function Toolkit({
                     "--brand-color": item.brandColor ?? "currentColor",
                   } as CSSProperties
                 }
-                className="group flex min-h-10 cursor-pointer items-center gap-2.5 border border-(--border) px-1.5 py-2 transition-colors duration-200 hover:border-(--text-h) motion-reduce:transition-none"
+                className="group flex min-h-11 items-center gap-2.5 border border-(--border) px-2 py-2 transition-colors duration-200 hover:border-(--text-h) motion-reduce:transition-none"
               >
                 <span
                   aria-hidden="true"

@@ -158,36 +158,39 @@ export default function GitHubContributions() {
 
   if (loading && !data) {
     return (
-      <section aria-label="GitHub contributions" className="w-full space-y-5">
+      <div className="w-full space-y-5">
         <div className="animate-pulse space-y-2">
           <div className="h-5 w-40 rounded bg-slate-200 dark:bg-slate-800" />
           <div className="h-4 w-56 rounded bg-slate-200 dark:bg-slate-800" />
         </div>
 
-        <div className="flex gap-1 overflow-hidden">
-          {Array.from({ length: 30 }).map((_, index) => (
-            <div key={index} className="flex shrink-0 flex-col gap-1">
-              {Array.from({ length: 7 }).map((_, dayIndex) => (
-                <div
-                  key={dayIndex}
-                  className="size-3 animate-pulse rounded-[3px] bg-slate-200 dark:bg-slate-800"
-                />
-              ))}
-            </div>
-          ))}
+        <div className="w-full overflow-x-auto touch-pan-x pb-2">
+          <div className="flex min-w-max gap-1">
+            {Array.from({ length: 30 }).map((_, index) => (
+              <div key={index} className="flex shrink-0 flex-col gap-1">
+                {Array.from({ length: 7 }).map((_, dayIndex) => (
+                  <div
+                    key={dayIndex}
+                    className="size-3 animate-pulse rounded-[3px] bg-slate-200 dark:bg-slate-800"
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <p className="text-xs text-slate-500">
+        <p role="status" aria-live="polite" className="text-xs text-slate-500">
           Loading GitHub contributions...
         </p>
-      </section>
+      </div>
     );
   }
 
   if (error && !data) {
     return (
-      <section
-        aria-label="GitHub contributions"
+      <div
+        role="alert"
+        aria-live="assertive"
         className="flex flex-col items-start gap-3 rounded-lg border border-slate-200 p-5 dark:border-slate-800"
       >
         <p className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -199,11 +202,11 @@ export default function GitHubContributions() {
         <button
           type="button"
           onClick={retry}
-          className="rounded-md border border-slate-300 px-3 py-2 text-xs font-medium transition-colors hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+          className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 px-4 py-2.5 text-xs font-medium transition-colors hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--text-h) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg)"
         >
           Try again
         </button>
-      </section>
+      </div>
     );
   }
 
@@ -212,20 +215,10 @@ export default function GitHubContributions() {
   const { user, weeks, totalContributions, updatedAt } = data;
 
   return (
-    <section
-      aria-labelledby="github-contributions-heading"
-      className="w-full space-y-6"
-    >
+    <div className="w-full space-y-6">
       {/* Section heading */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="space-y-1">
-          {/* <h2
-            id="github-contributions-heading"
-            className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white"
-          >
-            GitHub Contributions
-          </h2> */}
-
           <p className="text-sm text-slate-500">
             {numberFormatter.format(totalContributions)} contributions in the
             last year
@@ -236,18 +229,19 @@ export default function GitHubContributions() {
           href={user.profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-(--accent) text-xs font-bold hover:text-(--text-h)"
+          className="inline-flex min-h-11 items-center gap-1 py-2 text-(--accent) text-xs font-bold hover:text-(--text-h) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--text-h) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg) rounded-xs"
         >
           <span className="underline underline-offset-6 decoration-(--accent)">
             @{user.login}
           </span>
+          <span className="sr-only"> (opens in a new tab)</span>
 
           <RiArrowRightUpLongFill className="text-xs" aria-hidden="true" />
         </a>
       </div>
 
       {/* Contribution calendar */}
-      <div className="w-full overflow-x-auto pb-2">
+      <div className="w-full overflow-x-auto touch-pan-x pb-2">
         <div className="min-w-max">
           {/* Month labels */}
           <div
@@ -321,12 +315,11 @@ export default function GitHubContributions() {
                           role="img"
                           aria-label={formatContributionLabel(day)}
                           title={formatContributionLabel(day)}
-                          className="size-3 cursor-pointer rounded-[3px] outline-none transition-opacity duration-150 hover:opacity-70 focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                          className="size-3 rounded-[3px] transition-opacity duration-150 hover:opacity-70"
                           style={{
                             backgroundColor:
                               CONTRIBUTION_COLORS[day.contributionLevel],
                           }}
-                          tabIndex={0}
                         />
                       );
                     })}
@@ -348,7 +341,7 @@ export default function GitHubContributions() {
           }).format(new Date(updatedAt))}
         </p>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5" aria-hidden="true">
           <span className="mr-1 text-[10px] text-slate-500">Less</span>
 
           {Object.values(CONTRIBUTION_COLORS).map((color, index) => (
@@ -358,7 +351,6 @@ export default function GitHubContributions() {
               style={{
                 backgroundColor: color,
               }}
-              aria-hidden="true"
             />
           ))}
 
@@ -368,18 +360,22 @@ export default function GitHubContributions() {
 
       {/* Error indicator if a refresh fails after previous data loaded */}
       {error && (
-        <div className="flex items-center justify-between gap-3 text-xs text-red-600 dark:text-red-400">
+        <div
+          role="alert"
+          aria-live="polite"
+          className="flex items-center justify-between gap-3 text-xs text-red-600 dark:text-red-400"
+        >
           <span>{error}. Showing previously loaded data.</span>
 
           <button
             type="button"
             onClick={retry}
-            className="underline underline-offset-2"
+            className="inline-flex min-h-11 items-center py-2 px-1 underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--text-h) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg) rounded-xs"
           >
             Retry
           </button>
         </div>
       )}
-    </section>
+    </div>
   );
 }
