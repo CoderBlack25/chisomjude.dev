@@ -80,28 +80,50 @@ export default function GitHubContributions() {
           signal: controller.signal,
         });
 
-        const result = (await response.json()) as
-          | ContributionsResponse
-          | { error?: string };
-
-        if (!response.ok) {
+        let result: unknown = null;
+        try {
+          result = await response.json();
+        } catch {
           throw new Error(
-            "error" in result
-              ? result.error || "Unable to load contributions."
-              : "Unable to load contributions.",
+            `Unable to parse server response (HTTP ${response.status}).`,
           );
         }
 
+        if (!response.ok) {
+          let message = `Request failed with status ${response.status}.`;
+
+          if (result && typeof result === "object") {
+            const resObj = result as Record<string, unknown>;
+            if (typeof resObj.error === "string") {
+              message = resObj.error;
+            } else if (
+              resObj.error &&
+              typeof resObj.error === "object" &&
+              "message" in resObj.error &&
+              typeof (resObj.error as { message: unknown }).message === "string"
+            ) {
+              message = (resObj.error as { message: string }).message;
+            } else if (typeof resObj.message === "string") {
+              message = resObj.message;
+            }
+          }
+
+          throw new Error(message);
+        }
+
         if (
+          !result ||
+          typeof result !== "object" ||
           !("weeks" in result) ||
-          !Array.isArray(result.weeks) ||
-          !result.user
+          !Array.isArray((result as ContributionsResponse).weeks) ||
+          !("user" in result) ||
+          !(result as ContributionsResponse).user
         ) {
-          throw new Error("Invalid contribution data received.");
+          throw new Error("Invalid contribution data received from server.");
         }
 
         if (!ignore) {
-          setData(result);
+          setData(result as ContributionsResponse);
         }
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
