@@ -2,7 +2,10 @@ import { RiArrowRightUpLongFill } from "react-icons/ri";
 
 const Hero = () => {
   return (
-    <section aria-labelledby="hero-name" className="w-full mx-auto max-w-2xl px-4 sm:px-6">
+    <section
+      aria-labelledby="hero-name"
+      className="w-full mx-auto max-w-2xl px-4 sm:px-6"
+    >
       <div className="border-b-[0.5px] border-(--border)">
         <div className="flex flex-col space-y-8 py-14">
           <h1 className="uppercase font-bold text-xs tracking-wider text-(--text-h)">
@@ -24,11 +27,11 @@ const Hero = () => {
           </div>
 
           <p className="text-(--text) leading-7">
-            I’m Chisom, a frontend developer who builds clean, fast interfaces.
-            I’ve been working professionally for just over a year, and I care a
-            lot about the details that make a product feel good to use, from
-            layout and responsiveness to small interactions. I’m always pushing
-            myself to grow and improve.
+            I’m Chisom, a frontend developer focused on building clean, fast,
+            and intuitive interfaces. I pay close attention to the details that
+            make products enjoyable to use, from thoughtful layouts and
+            responsiveness to subtle interactions. I’m constantly learning,
+            refining my skills, and pushing myself to build better experiences.
           </p>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-5">
